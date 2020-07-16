@@ -8,98 +8,36 @@ import pandas as pd
 import xlsxwriter
 
 
-class GeneratorEngine:
-    jobs = list()
-    diseases = list()
-    hobbies = list()
-    human_traits = list()
-    phobias = list()
-    catastrophes = list()
-    wiki = wikipediaapi.Wikipedia("ru")
+class Gender:
+    Man = 1
+    Woman = 2
+    Helicopter = 3
 
-    @staticmethod
-    def get_from_wiki_by_category(category):
-        ans = list()
-        wiki = wikipediaapi.Wikipedia("ru")
-        page_py = wiki.page(category)
-        for page in page_py.categorymembers:
-            pattern = r':'
-            if not re.search(pattern, page):
-                summary = wiki.page(page).summary
-                # if len(summary) < 400:
-                ans.append((page, summary))
-        return ans
 
-    def init_jobs_wiki(self):
-        self.jobs = self.get_from_wiki_by_category("Категория:Профессии")
-
-    def init_health_wiki(self):
-        self.diseases = self.get_from_wiki_by_category("Категория:Заболевания_по_алфавиту")
-
-    def init_biological_characteristics(self):
-        pass
-
-    def init_additional_skills(self):
-        pass
-
-    def init_human_character(self):
-        self.human_traits = self.get_from_wiki_by_category("Категория:Черты_личности")
-
-    def init_hobbies(self):
-        self.hobbies = self.get_from_wiki_by_category("Категория:Хобби")
-
-    def init_phobias(self):
-        page = self.wiki.page("Список_фобий")
-        # print(page.sections)
-        letter = "А"
-        for i in range(32):
-            section = page.section_by_title(letter)
-            if section:
-                lines = section.text.split(sep='\n')
-                for phobia in lines:
-                    if len(phobia) > 0:
-                        name, summary = phobia.split(sep=' — ', maxsplit=1)
-                        self.phobias.append((name, summary))
-            letter = chr(ord(letter) + 1)
-
-    def init_special_conditions(self):
-        pass
-
-    def init_catastrophe(self):
-        categories = ("Категория:Природные_катастрофы", "Категория:Техногенные_катастрофы", "Категория:Экологические_катастрофы")
-        for category in categories:
-            self.catastrophes += self.get_from_wiki_by_category(category)
+ages = range(100)
+age_groups = {
+    0: ages[18:25],
+    1: ages[25:50],
+    -1: ages[50:70]
+}
 
 
 class Game:
+    class BunkerCharacteristics:
+        years_available = int()
+        medical_office = bool()
+        office_for_agriculture = bool()
+
     class Player:
-        pass
+        gender = int()
+        age = int()
 
     class Context:
         pass
 
 
 def main():
-    generator = GeneratorEngine()
-    generator.init_jobs_wiki()
-    generator.init_health_wiki()
-    generator.init_human_character()
-    generator.init_hobbies()
-    generator.init_phobias()
-    generator.init_catastrophe()
-    with pd.ExcelWriter("Bunker.xlsx", engine='xlsxwriter') as writer:
-        files = {
-            "Jobs": generator.jobs,
-            "Health": generator.diseases,
-            "Human Character Traits": generator.human_traits,
-            "Hobbies": generator.hobbies,
-            "Phobias": generator.phobias,
-            "Catastrophes": generator.catastrophes
-        }
-        for (sheet_name, data) in files.items():
-            # print(data)
-            df = pd.DataFrame(data, columns=["Name", "Description"])
-            df.to_excel(writer, sheet_name=sheet_name)
+    pass
 
 
 main()
