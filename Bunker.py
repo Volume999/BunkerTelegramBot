@@ -103,13 +103,3 @@ def main():
 
 
 main()
-
-# wiki = wikipediaapi.Wikipedia("ru")
-# page_py = wiki.page("Категория:Черты_личности")
-# for page in page_py.categorymembers:
-#     pattern = r':'
-#     if not re.search(pattern, page):
-#         summary = wiki.page(page).summary
-#         # if len(summary) < 400:
-#         # ans.append((page, summary))
-#         print(page, summary)
